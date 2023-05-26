@@ -1,0 +1,19 @@
+services:
+    postgres:
+        container_name: task-mannager
+        image: postgres:latest
+        environment:
+            POSTGRES_USER: "taskmannager"
+            POSTGRES_PASSWORD: "password"
+            POSTGRES_DATABASE: "task-mannager"
+        ports:
+            - "5432:5432"
+    adminer_container:
+        container_name: adminer
+        image: adminer:latest
+        environment:
+            ADMINER_DEFAULT_SERVER: postgres
+        ports:
+            - 8080:8080
+volumes:
+    postgres:
