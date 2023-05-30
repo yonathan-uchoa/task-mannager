@@ -21,7 +21,7 @@ Task.init(
         },
         status: {
             type: DataTypes.BOOLEAN,
-            default: false
+            defaultValue: false
         },
         date_creation: {
             type: DataTypes.DATE,
@@ -29,9 +29,12 @@ Task.init(
         },
         date_end: {
             type: DataTypes.DATE,
-            required: false,
-            allowNull: true,
-            default: null
+            required: false
+        },
+        deleted: {
+            type: DataTypes.BOOLEAN,
+            required: true,
+            defaultValue: false
         }
     },
     {
