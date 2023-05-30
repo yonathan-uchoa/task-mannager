@@ -26,9 +26,9 @@ describe('UserController', () => {
         deepEqual(result, UserMock.modified);
     });
     it('should return all', async () => {
-        const result = await UserController.findAll();
-        console.log("findAll");
-        console.log(JSON.stringify(result));
+        const [{ dataValues: result }] = await UserController.findAll();
+        delete result.id_user;
+        deepEqual(result, UserMock.modified);
     });
     it('should delete a user', async () => {
         const result = await UserController.delete(ID);
