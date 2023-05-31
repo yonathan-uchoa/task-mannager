@@ -7,6 +7,14 @@ const Task = {
         status: false,
         deleted: false
     },
+    secondTask: {
+        title: 'second Title',
+        description: 'We have other Task!',
+        date_creation: new Date('10/08/2023'),
+        date_end: new Date('11/01/2023'),
+        status: false,
+        deleted: false
+    },
     modified: {
         title: 'New Title',
         description: 'Modified Description!',
