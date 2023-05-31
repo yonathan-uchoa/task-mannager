@@ -3,9 +3,10 @@ const { Task } = require('../models');
 
 
 class TaskController {
-    static async findAllByUser(id_user){
+    static async findAllFilter(where){
         return Task.findAll({
-            where: { id_user, deleted: false }
+            where,
+            order: [ ['date_end', 'ASC']]
         });
     }
     static async create(task) {
