@@ -1,29 +1,28 @@
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../database/postgres-connection");
+const { DataTypes } = require("sequelize");
 
-class User extends Model {};
-User.init(
-    {
-        id_user: {
-            type: DataTypes.INTEGER,
-            required: true,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        name: {
-            type: DataTypes.STRING(50),
-            required: true
-        },
-        password: {
-            type: DataTypes.STRING(34),
-            required: true
-        }
+const UserSchema = {
+  name: "User",
+  schema: {
+    id_user: {
+      type: DataTypes.INTEGER,
+      required: true,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    {
-        sequelize,
-        timestamps: false,
-        tableName: 'users'
-    }
-);
+    name: {
+      type: DataTypes.STRING(50),
+      required: true,
+    },
+    password: {
+      type: DataTypes.STRING(34),
+      required: true,
+    },
+  },
+  options: {
+    freezeTableName: 0,
+    timestamps: 0,
+    tableName: "users",
+  },
+};
 
-module.exports = User
+module.exports = UserSchema;

@@ -1,8 +1,12 @@
-const sequelize = require("../database/postgres-connection");
-const Task = require("./tasks");
-const User = require("./users");
+const associations = async (schemas) => {
+  schemas["User"].hasMany(schemas["Task"], { foreignKey: "id_user" }); // user/task association
+  await schemas["Task"].sync({ alter: true }); // sync tasks table to inser association
+};
 
-User.hasMany(Task, { foreignKey: 'id_user' });
-Task.belongsTo(User, { foreignKey: 'id_user' });
-
-module.exports = {User, Task, sequelize};
+module.exports = {
+  schemas: {
+    User: require("./users"),
+    Task: require("./tasks"),
+  },
+  associations,
+};

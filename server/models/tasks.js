@@ -1,47 +1,46 @@
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../database/postgres-connection");
+const { DataTypes } = require("sequelize");
 
-class Task extends Model {};
-Task.init(
-    {
-        id_task: {
-            type: DataTypes.INTEGER,
-            required: true,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        title: {
-            type: DataTypes.STRING(50),
-            required: true
-        },
-        description: {
-            type: DataTypes.TEXT,
-            required: false,
-            allowNull: true
-        },
-        status: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false
-        },
-        date_creation: {
-            type: DataTypes.DATE,
-            required: true
-        },
-        date_end: {
-            type: DataTypes.DATE,
-            required: false
-        },
-        deleted: {
-            type: DataTypes.BOOLEAN,
-            required: true,
-            defaultValue: false
-        }
+const TaskSchema = {
+  name: "Task",
+  schema: {
+    id_task: {
+      type: DataTypes.INTEGER,
+      required: true,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    {
-        sequelize,
-        timestamps: false,
-        tableName: 'tasks'
-    }
-);
+    title: {
+      type: DataTypes.STRING(50),
+      required: true,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      required: false,
+      allowNull: true,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    date_creation: {
+      type: DataTypes.DATE,
+      required: true,
+    },
+    date_end: {
+      type: DataTypes.DATE,
+      required: false,
+    },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      required: true,
+      defaultValue: false,
+    },
+  },
+  options: {
+    freezeTableName: 0,
+    timestamps: 0,
+    tableName: "tasks",
+  },
+};
 
-module.exports = Task;
+module.exports = TaskSchema;
