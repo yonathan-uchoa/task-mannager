@@ -3,7 +3,7 @@ const { DataTypes } = require("sequelize");
 const TaskSchema = {
   name: "Task",
   schema: {
-    id_task: {
+    id: {
       type: DataTypes.INTEGER,
       required: true,
       primaryKey: true,
