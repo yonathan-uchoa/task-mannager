@@ -3,14 +3,14 @@ const { DataTypes } = require("sequelize");
 const UserSchema = {
   name: "User",
   schema: {
-    id_user: {
+    id: {
       type: DataTypes.INTEGER,
       required: true,
       primaryKey: true,
       autoIncrement: true,
     },
     name: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(100),
       required: true,
     },
     password: {

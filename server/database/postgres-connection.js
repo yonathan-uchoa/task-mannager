@@ -8,13 +8,14 @@ const PASSWORD = process.env.PG_PASSWORD || "password";
 const HOST = process.env.PG_HOST || "localhost";
 class PostgreSQL extends ContextStrategy {
   constructor(connection, schema) {
-    super(schema);
+    super();
+    this._db = schema;
     this._connection = connection;
   }
 
   static async defineModel(connection, schema) {
     const model = connection.define(schema.name, schema.schema, schema.options);
-    model.sync();
+    await model.sync({alter: true});
     return model;
   }
 

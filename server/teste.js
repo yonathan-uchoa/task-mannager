@@ -1,10 +1,19 @@
-const UserController = require("./controller/user-controller");
+const ContextStrategy = require("./database/contextStrategy");
+const PostgreSQL = require("./database/postgres-connection");
 const Models = require("./models");
 
-
-
 (async () => {
-    await Models.sequelize.sync({force: true}).then(console.log("conectado!"));
-    UserController.findAll().then(res => console.log(JSON.stringify(res)));
-
+  const connection = await PostgreSQL.connect();
+  const models = {};
+  await Promise.all(
+    Object.keys(Models.schemas).map(async (key) => {
+      models[key] = await PostgreSQL.defineModel(
+        connection,
+        Models.schemas[key]
+      );
+    })
+  );
+  await Models.associations(models);
+  const context = new ContextStrategy(new PostgreSQL(connection, models));
+  console.log(context);
 })();

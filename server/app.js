@@ -1,41 +1,64 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const Hapi = require("@hapi/hapi");
+const Inert = require("@hapi/inert");
+const Vision = require("@hapi/vision");
+const HapiSwagger = require("hapi-swagger");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const Models = require("./models");
+const UserRoutes = require("./routes/user-router");
+const ContextStrategy = require("./database/contextStrategy");
+const PostgreSQL = require("./database/postgres-connection");
 
-var app = express();
+const swaggerConfig = {
+  info: {
+    title: "#Task Mannager API",
+    version: "v1.0",
+  },
+};
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+var app = new Hapi.Server({
+  port: 5000,
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+function mapRoutes(instance, methods) {
+  return methods.map((method) => instance[method]());
+}
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+async function main() {
+  const models = {};
+  const context = {};
 
-module.exports = app;
+  const connection = await PostgreSQL.connect();
+  await Promise.all(
+    Object.keys(Models.schemas).map(async (key) => {
+      models[key] = await PostgreSQL.defineModel(
+        connection,
+        Models.schemas[key]
+      );
+    })
+  );
+  await Models.associations(models);
+
+  Object.keys(models).forEach(
+    (key) =>
+      (context[key] = new ContextStrategy(
+        new PostgreSQL(connection, models[key])
+      ))
+  );
+
+  await app.register([
+    Inert,
+    Vision,
+    {
+      plugin: HapiSwagger,
+      options: swaggerConfig,
+    },
+  ]);
+
+  const teste = [
+    ...mapRoutes(new UserRoutes(context["User"]), UserRoutes.methods()),
+  ];
+
+  app.route(teste);
+  await app.start();
+}
+module.exports = main();
