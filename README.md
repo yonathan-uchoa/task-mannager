@@ -51,8 +51,8 @@ Recursos:
   - [x] Create *User* unity test;
   - [x] Create *Task* controller;
   - [x] Create *Task* unity test;
-  - [ ] Create *User routes*;
-  - [ ] Create *Task routes*;
+  - [x] Create *User routes*;
+  - [x] Create *Task routes*;
   - [ ] Implement a crypto to *User* password;
   - [ ] Implement *JWT* to the project;
 
