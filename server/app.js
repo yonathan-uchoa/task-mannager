@@ -4,9 +4,10 @@ const Vision = require("@hapi/vision");
 const HapiSwagger = require("hapi-swagger");
 
 const Models = require("./models");
-const UserRoutes = require("./routes/user-router");
+const UserRoute = require("./routes/user-router");
 const ContextStrategy = require("./database/contextStrategy");
 const PostgreSQL = require("./database/postgres-connection");
+const TaskRoute = require("./routes/task-router");
 
 const swaggerConfig = {
   info: {
@@ -55,10 +56,11 @@ async function main() {
   ]);
 
   const teste = [
-    ...mapRoutes(new UserRoutes(context["User"]), UserRoutes.methods()),
+    ...mapRoutes(new UserRoute(context["User"]), UserRoute.methods()),
+    ...mapRoutes(new TaskRoute(context["Task"]), TaskRoute.methods()),
   ];
 
   app.route(teste);
-  await app.start();
+  app.start().then(console.log("server start on port 5000!"));
 }
 module.exports = main();
