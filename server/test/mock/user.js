@@ -1,6 +1,6 @@
-const User = {
+const MockUser = {
     default: { name: 'jessie', password: 'password'},
     modified: { name: 'james', password: 'newpass'}
 };
 
-module.exports = User;
+module.exports = MockUser;
